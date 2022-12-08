@@ -1,0 +1,53 @@
+<html><head>
+    <title>Token Generation and Authentication</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <h1>Generated Token:</h1>
+    <input type="text" id="generated-token" readonly="">
+    <br>
+    <button id="generate-button">Generate Token</button>
+    <br>
+    <button id="authenticate-button">Authenticate Token</button>
+    <br>
+    <h1 id="authentication-result"> </h1>
+    <script>
+      // Add event listener for the generate button
+      document.getElementById("generate-button").addEventListener("click", function() {
+        // Generate a random token using the Math.random() function
+        // and a string of all the possible characters (letters, numbers)
+        // that could be in the token
+        var possibleCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var generatedToken = "";
+        for (var i = 0; i < 16; i++) {
+          generatedToken += possibleCharacters.charAt(Math.floor(Math.random() * possibleCharacters.length));
+        }
+        // Set the value of the generated token input to the generated token
+        document.getElementById("generated-token").value = generatedToken;
+      });
+
+      // Add event listener for the authenticate button
+      document.getElementById("authenticate-button").addEventListener("click", function() {
+        // Get the token value from the input field
+        var token = $("#generated-token").val();
+
+        // Send the token to the server for validation
+        // using an Ajax POST request
+        $.ajax({
+          type: "POST",
+          url: "/authenticate",
+          data: { token: token },
+          success: function(response) {
+            // If the authentication was successful, show a message
+            if (response.success) {
+              $("#authentication-result").text("hurrayy!!!");
+            } else {
+              $("#authentication-result").text("Token authentication failed");
+            }
+          }
+        });
+      });
+    </script>
+  
+
+</body></html>
